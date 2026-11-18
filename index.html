@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Work Tools - 나만의 작업 도구</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    header h1 { font-size: 1.8rem; color: #1a73e8; margin-bottom: 8px; }
+    header p { color: #666; font-size: 0.95rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      border: 1px solid #e1e4e8;
+      border-radius: 8px;
+      padding: 20px;
+      background: #fafbfc;
+    }
+    .card h2 { font-size: 1.2rem; margin-bottom: 12px; color: #24292e; }
+    textarea {
+      width: 100%;
+      height: 150px;
+      padding: 10px;
+      border: 1px solid #d1d5da;
+      border-radius: 6px;
+      resize: vertical;
+      font-size: 0.95rem;
+    }
+    .timer-display {
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px 0;
+      color: #24292e;
+      font-variant-numeric: tabular-nums;
+    }
+    .btn-group { display: flex; gap: 10px; justify-content: center; }
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .btn-primary { background: #1a73e8; color: #fff; }
+    .btn-primary:hover { background: #1557b0; }
+    .btn-secondary { background: #e1e4e8; color: #24292e; }
+    .btn-secondary:hover { background: #d1d5da; }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.85rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🛠️ My Work Tools</h1>
+    <p>GitHub Pages로 배포한 나만의 첫 웹페이지입니다.</p>
+  </header>
+
+  <div class="grid">
+    <!-- 간단한 메모장 -->
+    <div class="card">
+      <h2>📝 빠른 메모</h2>
+      <textarea id="memo" placeholder="여기에 메모를 입력하세요. 브라우저에 자동 저장됩니다."></textarea>
+    </div>
+
+    <!-- 집중 타이머 -->
+    <div class="card">
+      <h2>⏱️ 25분 집중 타이머</h2>
+      <div class="timer-display" id="timer">25:00</div>
+      <div class="btn-group">
+        <button class="btn-primary" onclick="startTimer()">시작</button>
+        <button class="btn-secondary" onclick="resetTimer()">초기화</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Hosted on GitHub Pages
+  </footer>
+</div>
+
+<script>
+  // 메모 자동 저장 기능
+  const memo = document.getElementById('memo');
+  memo.value = localStorage.getItem('my_work_memo') || '';
+  memo.addEventListener('input', () => {
+    localStorage.setItem('my_work_memo', memo.value);
+  });
+
+  // 타이머 기능
+  let timeLeft = 25 * 60;
+  let timerId = null;
+  const timerDisplay = document.getElementById('timer');
+
+  function updateDisplay() {
+    const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+    const s = String(timeLeft % 60).padStart(2, '0');
+    timerDisplay.textContent = `${m}:${s}`;
+  }
+
+  function startTimer() {
+    if (timerId) return;
+    timerId = setInterval(() => {
+      if (timeLeft > 0) {
+        timeLeft--;
+        updateDisplay();
+      } else {
+        clearInterval(timerId);
+        timerId = null;
+        alert('25분 집중 시간이 종료되었습니다!');
+      }
+    }, 1000);
+  }
+
+  function resetTimer() {
+    clearInterval(timerId);
+    timerId = null;
+    timeLeft = 25 * 60;
+    updateDisplay();
+  }
+</script>
+
+</body>
+</html>
